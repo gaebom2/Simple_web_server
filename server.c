@@ -120,7 +120,7 @@ void log(char *ip, char *fname, int fsize) //클라이언트ip, 전송파일명,
 	char logbuff[200]; //로그에 적기 위한 버퍼 변수
 
 	sprintf(logbuff, "%s %s %d\n", ip, fname, fsize); //매개변수들 합치기
-	printf("%s", logbuff);
+	//printf("%s", logbuff);
 
 	if ((logfd = open(path, O_WRONLY | O_APPEND, 0644))) { //로그파일 열기
 	    //printf("로그파일 open!\n");
@@ -182,9 +182,9 @@ void *client_thread(void *n1)
 	if (file_fd == -1) {
 		if (strstr(buffer, "&to")) {  //주소에 &, to가 있는 경우
 			int n = sum(&buffer[5]); //sum 함수 호출
-			sprintf(buffer, "HTTP/1.1 200 OK\nContent-Type: text/html\r\n\r\n<HTML><BODY><H1>%d</H1></BODY></HTML>\r\n", n);
+			sprintf(buffer, "'HTTP/1.1 200 OK'\r\n\r\n<!DOCTYPE HTML><HTML><HEAD><meta http-equiv='Content-type' content='text/html'; charset=utf-8'/></HEAD><BODY><H1>%d</H1></BODY></HTML>\r\n", n);
 			write(curfd, buffer, strlen(buffer));
-			log(buff, file_name, strlen(buffer) - 80); //로그 작성
+			log(buff, file_name, strlen(buffer)); //로그 작성
 		}
 		else { //주소에 &, to 가 들어가지 않은 경우
 			sprintf(buffer, "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<HTML><BODY><H1>NOT FOUND</H1></BODY></HTML>\r\n");
